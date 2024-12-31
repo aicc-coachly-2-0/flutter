@@ -1,29 +1,76 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test/auth/signup_complete.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_test/state_controller/auth_controller.dart';
+import 'package:http/http.dart' as http;
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
-  // 회원가입 버튼 클릭 시 실행할 로직을 onSubmit 함수로 분리
-  void onSubmit(BuildContext context, WidgetRef ref) {
-    final profileModel = ref.read(profileProvider);
-    final authModel = ref.read(authControllerProvider);
+  // void getEnv() async {
+  //   await dotenv.load();
+  //   String? baseUrl = dotenv.get('API_BASE_URL');
+  // }
 
-    // 상태를 확인
-    print('AuthController State: $authModel');
-    print('ProfileController State: $profileModel');
+  // 서버로 POST 요청을 보내는 함수
+  Future<void> sendSignupData(Map<String, dynamic> signupData) async {
+    final url = Uri.parse('${dotenv.env['API_BASE_URL']}/auth/signup');
 
-    // 여기서 서버와의 연동 및 회원가입 로직을 추가할 수 있습니다.
-    // 예시:
-    // authService.register(authModel, profileModel);
+    // 요청 헤더와 본문을 설정
+    final headers = {'Content-Type': 'application/json'};
+
+    // 서버에 보낼 JSON 데이터 (signupData는 이미 authModel과 profileModel을 합친 데이터)
+    final body = json.encode(signupData);
+
+    // POST 요청 보내기
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        // 성공적으로 응답을 받았다면
+        print('회원가입 성공');
+      } else {
+        // 실패한 경우
+        print('회원가입 실패: ${response.body}');
+      }
+    } catch (e) {
+      // 예외 처리
+      print('서버와의 연결에 실패했습니다: $e');
+    }
+  }
+
+  void onSubmit(BuildContext context, WidgetRef ref) async {
+    final profileModel = ref.read(profileProvider); // 프로필 정보 가져오기
+    final authModel = ref.read(authControllerProvider); // 인증 정보 가져오기
+
+    // 성별 변환 (한국어 -> 영어)
+    String gender = profileModel.gender == '남성' ? 'male' : 'female';
+
+    // authModel과 profileModel을 하나로 묶어서 서버에 전송할 객체 만들기
+    final signupData = {
+      'user_id': authModel['loginId'],
+      'user_pw': authModel['password'],
+      'user_email': authModel['email'],
+      'user_name': authModel['name'],
+      'user_phone': authModel['phoneNumber'],
+      'user_date_of_birth': profileModel.birthDate?.toIso8601String(),
+      'user_gender': gender, // 변환된 성별 값
+      'profile_image_path': profileModel.profileImagePath,
+      'nickname': profileModel.nickname,
+    };
+
+    print('서버로 보내는 데이터: $signupData');
+    // 서버로 데이터를 보내는 함수 호출
+    await sendSignupData(signupData);
+
+    // 서버와의 연동 후 화면 이동
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            const SignupCompleted(), // 임시로 FocusOnExercisePage로 이동
+        builder: (context) => const SignupCompleted(), // 임시로 화면 전환
       ),
     );
   }

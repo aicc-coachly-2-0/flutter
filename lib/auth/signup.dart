@@ -108,6 +108,22 @@ class CreateAccountScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16.0),
 
+              TextFormField(
+                initialValue: authState['name'],
+                decoration: InputDecoration(
+                  labelText: '이름',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                onChanged: (value) {
+                  ref.read(authControllerProvider.notifier).setName(value);
+                },
+              ),
+              const SizedBox(height: 16.0),
+
               // 연락처 입력 필드
               TextFormField(
                 initialValue: authState['phoneNumber'],

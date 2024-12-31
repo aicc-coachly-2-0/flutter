@@ -1,27 +1,67 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test/auth/signupagree.dart';
+import 'package:flutter_application_test/state_controller/loginProvider.dart';
 import 'package:flutter_application_test/home/home.dart';
+import 'package:flutter_application_test/auth/signupagree.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // ConsumerWidget 사용
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+// 로그인 화면 (ConsumerWidget 사용)
+class Login extends ConsumerWidget {
+  Login({super.key});
 
-  @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _idController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  // 로그인 요청을 처리하는 함수
+  Future<void> onSubmit(BuildContext context, WidgetRef ref) async {
+    String id = _idController.text;
+    String password = _passwordController.text;
+
+    try {
+      // 로그인 함수 호출
+      await loginUser(ref, id, password);
+
+      // 로그인 후 처리 (예: 화면 전환)
+      final user = ref.read(authProvider);
+      if (user != null) {
+        // 로그인 성공 후 홈페이지로 이동
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const Homepage()), // Homepage로 이동
+        );
+      } else {
+        // 로그인 실패 처리
+        _showErrorDialog(context, '로그인 실패');
+      }
+    } catch (error) {
+      _showErrorDialog(context, '로그인 중 오류가 발생했습니다');
+    }
+  }
+
+  // 오류 메시지를 보여주는 함수
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('오류'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final widthRatio = MediaQuery.of(context).size.width / 375;
     final heightRatio = MediaQuery.of(context).size.height / 812;
 
@@ -42,23 +82,22 @@ class _LoginState extends State<Login> {
         title: Text(
           "로그인",
           style: TextStyle(
-            color: Colors.black, // 명확한 텍스트 색상
+            color: Colors.black,
             fontSize: 16,
             fontFamily: 'GowunBatang',
             fontWeight: FontWeight.w400,
             letterSpacing: -0.40,
           ),
         ),
-        centerTitle: true, // 제목 가운데 정렬
-        backgroundColor: Color.fromARGB(255, 255, 111, 97), // 투명도 제거
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 255, 111, 97),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: widthRatio * 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // LOGIN 텍스트
-            SizedBox(height: heightRatio * 60), // 화면 상단 여백
+            SizedBox(height: heightRatio * 60),
             Center(
               child: Text(
                 'LOGIN',
@@ -70,15 +109,15 @@ class _LoginState extends State<Login> {
                 ),
               ),
             ),
-            SizedBox(height: heightRatio * 40), // "LOGIN" 텍스트와 입력 필드 사이의 간격
+            SizedBox(height: heightRatio * 40),
 
-            // 이메일 입력 필드
+            // 아이디 입력 필드
             Row(
               children: [
                 Text(
-                  '이메일',
+                  'ID',
                   style: TextStyle(
-                    color: const Color.fromARGB(255, 255, 111, 97),
+                    color: Color.fromARGB(255, 255, 111, 97),
                     fontSize: 16,
                     fontFamily: 'GowunBatang',
                     fontWeight: FontWeight.w700,
@@ -88,7 +127,7 @@ class _LoginState extends State<Login> {
                 ),
                 Spacer(),
                 Container(
-                  width: widthRatio * 280,
+                  width: widthRatio * 300,
                   height: heightRatio * 52,
                   padding: EdgeInsets.symmetric(horizontal: widthRatio * 10),
                   decoration: ShapeDecoration(
@@ -98,18 +137,17 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   child: TextFormField(
-                    controller: _emailController,
+                    controller: _idController,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: '이메일을 입력하세요',
+                      hintText: '아이디를 입력하세요',
                       hintStyle: TextStyle(
                         color: Color(0xFFCCCCCC),
                         fontSize: 13,
                         fontFamily: 'GowunBatang',
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.33,
-                        height: 1.2,
                       ),
                     ),
                   ),
@@ -124,7 +162,7 @@ class _LoginState extends State<Login> {
                 Text(
                   'P/W',
                   style: TextStyle(
-                    color: const Color.fromARGB(255, 255, 111, 97),
+                    color: Color.fromARGB(255, 255, 111, 97),
                     fontSize: 16,
                     fontFamily: 'GowunBatang',
                     fontWeight: FontWeight.w700,
@@ -134,7 +172,7 @@ class _LoginState extends State<Login> {
                 ),
                 Spacer(),
                 Container(
-                  width: widthRatio * 280,
+                  width: widthRatio * 300,
                   height: heightRatio * 52,
                   padding: EdgeInsets.symmetric(horizontal: widthRatio * 10),
                   decoration: ShapeDecoration(
@@ -155,7 +193,6 @@ class _LoginState extends State<Login> {
                         fontFamily: 'GowunBatang',
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.33,
-                        height: 1.2,
                       ),
                     ),
                   ),
@@ -176,17 +213,7 @@ class _LoginState extends State<Login> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                onPressed: () async {
-                  String email = _emailController.text.toString();
-                  String password = _passwordController.text.toString();
-
-                  try {
-                    // 여기에 FirebaseAuth 로그인 로직 추가
-                    Navigator.pop(context);
-                  } catch (e) {
-                    // 예외 처리
-                  }
-                },
+                onPressed: () => onSubmit(context, ref),
                 child: const Text(
                   '로그인',
                   style: TextStyle(
@@ -200,7 +227,7 @@ class _LoginState extends State<Login> {
               ),
             ),
 
-            // "아직 계정이 없으신가요?" 텍스트와 회원가입 버튼
+            // 회원가입 페이지로 이동하는 버튼
             SizedBox(height: heightRatio * 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -210,7 +237,7 @@ class _LoginState extends State<Login> {
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: 'GowunBatang',
-                    color: const Color.fromARGB(255, 42, 42, 42),
+                    color: Color.fromARGB(255, 42, 42, 42),
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -219,8 +246,7 @@ class _LoginState extends State<Login> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            const SignupAgree(), // 값을 넘기지 않고 이동
+                        builder: (context) => const SignupAgree(),
                       ),
                     ); // 회원가입 페이지로 이동
                   },
@@ -229,10 +255,9 @@ class _LoginState extends State<Login> {
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: 'GowunBatang',
-                      color: const Color.fromARGB(255, 255, 111, 97),
+                      color: Color.fromARGB(255, 255, 111, 97),
                       fontWeight: FontWeight.w700,
                       decoration: TextDecoration.underline,
-                      decorationColor: Color(0xFF45B0C5),
                       letterSpacing: -0.40,
                     ),
                   ),

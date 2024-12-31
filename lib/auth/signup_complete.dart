@@ -45,7 +45,7 @@ class SignupCompleted extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const Login()), // LoginPage로 이동
+                      builder: (context) => Login()), // LoginPage로 이동
                 );
               },
               style: ElevatedButton.styleFrom(

@@ -4,7 +4,6 @@ import 'package:flutter_application_test/state_controller/ai_food_questions_noti
 import 'package:flutter_application_test/state_controller/ai_question_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_application_test/home/home.dart'; // 홈 페이지 임포트
 import 'package:flutter_application_test/ai_service/ai_pt_answer.dart'; // AI 응답 페이지 임포트
 
 class ExerciseAbilityPage extends ConsumerStatefulWidget {

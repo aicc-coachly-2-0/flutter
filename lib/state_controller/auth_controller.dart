@@ -1,15 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'dart:io';
 
-// Auth 상태 관리용 Notifier
 class AuthController extends StateNotifier<Map<String, String>> {
   AuthController()
       : super({
           'loginId': '',
           'password': '',
           'confirmPassword': '',
+          'name': '',
           'phoneNumber': '',
           'email': '',
         });
@@ -29,6 +27,11 @@ class AuthController extends StateNotifier<Map<String, String>> {
     state = {...state, 'confirmPassword': confirmPassword};
   }
 
+  // 이름 설정
+  void setName(String name) {
+    state = {...state, 'name': name};
+  }
+
   // 연락처 설정
   void setPhoneNumber(String phoneNumber) {
     state = {...state, 'phoneNumber': phoneNumber};
@@ -44,8 +47,14 @@ class AuthController extends StateNotifier<Map<String, String>> {
     return state['loginId']!.isNotEmpty &&
         state['password']!.isNotEmpty &&
         state['confirmPassword']! == state['password'] &&
+        state['name']!.isNotEmpty &&
         state['phoneNumber']!.isNotEmpty &&
         state['email']!.isNotEmpty;
+  }
+
+  // 비밀번호와 비밀번호 확인이 동일한지 체크
+  bool isPasswordValid() {
+    return state['password'] == state['confirmPassword'];
   }
 }
 
@@ -83,7 +92,16 @@ class ProfileModel {
     );
   }
 
-  // 상태를 직관적으로 출력할 수 있도록 toString 메서드 재정의
+  // ProfileModel을 JSON으로 변환하는 toJson 메서드 추가
+  Map<String, dynamic> toJson() {
+    return {
+      'profile_image_path': profileImagePath,
+      'nickname': nickname,
+      'birth_date': birthDate?.toIso8601String(),
+      'gender': gender,
+    };
+  }
+
   @override
   String toString() {
     return 'ProfileModel(profileImagePath: $profileImagePath, nickname: $nickname, birthDate: $birthDate, gender: $gender)';
