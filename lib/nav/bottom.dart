@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test/ai_service/ai_service.dart';
 import 'package:flutter_application_test/comunity/main_comunity.dart';
+import 'package:flutter_application_test/home/challenge/challenge_main.dart';
 import 'package:flutter_application_test/home/main_home.dart';
+import 'package:flutter_application_test/home/notification/notification.dart';
+import 'package:flutter_application_test/home/video.dart';
 // import 'package:flutter_application_test/home/video.dart';
-import 'package:flutter_application_test/nav/sidebar.dart'; // 사이드바 임포트
+import 'package:flutter_application_test/nav/sidebar.dart';
+import 'package:flutter_application_test/userpage/user_my_page.dart'; // 사이드바 임포트
 
 class Bottom extends StatefulWidget {
   const Bottom({super.key});
@@ -25,10 +29,10 @@ class _BottomState extends State<Bottom> {
   final List<Widget> _screens = [
     // 각 탭에 대응되는 화면들
     const MainHome(),
-    Center(child: Text('Challenge')),
+    const ChallengeMain(),
     const AiServiceChoice(), // AI 서비스 화면
-    const MainCommunity(), // VideoTime 화면
-    Center(child: Text('More Screen')),
+    const MainCommunity(),
+    const UserMyPage(),
   ];
 
   final GlobalKey<ScaffoldState> _scaffoldKey =
@@ -49,11 +53,23 @@ class _BottomState extends State<Bottom> {
       key: _scaffoldKey, // Scaffold에 key 설정
       endDrawer: const SideBar(), // 오른쪽 사이드바 설정
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 111, 97), // 원하는 색으로 설정
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255), // 원하는 색으로 설정
         title: Text(_titles[_selectedIndex]), // 탭에 맞는 타이틀 표시
         automaticallyImplyLeading: false, // 기본 뒤로가기 버튼을 없앰
+        centerTitle: true, // 타이틀을 중앙에 배치
         actions: [
-          // 메뉴 버튼을 오른쪽에 배치
+          IconButton(
+            icon: const Icon(Icons.notifications_none_sharp), // 알림 아이콘
+            onPressed: () {
+              // 알림 버튼 클릭 시 알림창 열기
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NotificationPage(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.menu), // 메뉴 아이콘
             onPressed: () {
@@ -64,10 +80,12 @@ class _BottomState extends State<Bottom> {
         ],
       ),
       body: _screens[_selectedIndex], // 현재 선택된 화면을 표시
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       bottomNavigationBar: Container(
         color: const Color.fromARGB(255, 255, 255, 255),
         height: screenHeight * 0.11, // 바텀 네비게이션의 높이
         child: BottomNavigationBar(
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
           currentIndex: _selectedIndex, // 현재 선택된 탭 인덱스
           onTap: _onItemTapped, // 탭 클릭 시 실행되는 함수
           selectedItemColor: const Color.fromARGB(255, 0, 0, 0),

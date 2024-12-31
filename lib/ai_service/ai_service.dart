@@ -8,13 +8,13 @@ class AiServiceChoice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center, // 버튼들이 세로로 가운데 정렬
           crossAxisAlignment: CrossAxisAlignment.center, // 버튼들이 가로로 가운데 정렬
           children: [
-            // 화면의 70% 높이를 차지하는 부분에 버튼을 배치
             Expanded(
               flex: 7, // 화면 높이의 70% 차지
               child: Align(
