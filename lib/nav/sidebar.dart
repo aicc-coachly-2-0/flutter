@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test/home/payment/subscription.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_test/auth/login.dart';
 import 'package:flutter_application_test/home/calendar/my_calendar.dart';
@@ -81,7 +82,7 @@ class SideBar extends ConsumerWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PaymentWidget(),
+                        builder: (context) => const Subscription(),
                       ),
                     );
                   },

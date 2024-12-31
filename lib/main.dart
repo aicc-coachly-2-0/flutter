@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test/ai_questions_pt/agree.dart';
+import 'package:flutter_application_test/home/payment/payment_widget.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_test/auth/login.dart';
@@ -32,6 +33,8 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const Homepage(), // 홈 페이지로 이동
         '/aiquestion': (context) =>
             const ExerciseStartPage(), // AI 질문 시작 페이지로 이동
+        '/payment': (context) =>  PaymentWidget(), // 결제 페이지로 이동
+         '/bottom': (context) => const Bottom(), // Bottom 컴포넌트
       },
     );
   }
