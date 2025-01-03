@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test/home/challenge/detail_deadline_mission.dart';
 
 class DeadlineMission extends StatelessWidget {
   const DeadlineMission({super.key});
@@ -38,6 +39,12 @@ class DeadlineMission extends StatelessWidget {
               onPressed: () {
                 // 버튼 클릭 시 동작
                 print('자세히 보기 버튼 클릭');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DetailDeadlineMission(),
+                  ),
+                );
               },
             ),
           ],

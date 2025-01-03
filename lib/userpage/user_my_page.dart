@@ -215,7 +215,7 @@ class _UserMyPageState extends State<UserMyPage>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => FeedUpload(), // 임시로 FocusOnExercisePage로 이동
+              builder: (context) => FeedUpload(),
             ),
           );
           print('추가하기 버튼 눌림');

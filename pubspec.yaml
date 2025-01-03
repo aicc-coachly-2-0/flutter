@@ -48,6 +48,7 @@ dependencies:
   get: ^4.6.6
   photo_manager: ^3.6.3
   flutter_dotenv: ^5.2.1
+  http_parser: ^4.1.1
 
 dev_dependencies:
   flutter_test:

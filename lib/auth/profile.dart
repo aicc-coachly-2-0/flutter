@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_test/state_controller/auth_controller.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
@@ -19,25 +20,63 @@ class ProfilePage extends ConsumerWidget {
   Future<void> sendSignupData(Map<String, dynamic> signupData) async {
     final url = Uri.parse('${dotenv.env['API_BASE_URL']}/auth/signup');
 
-    // 요청 헤더와 본문을 설정
-    final headers = {'Content-Type': 'application/json'};
+    // 요청 헤더 설정 (multipart/form-data는 자동으로 boundary를 설정)
+    final request = http.MultipartRequest('POST', url);
 
-    // 서버에 보낼 JSON 데이터 (signupData는 이미 authModel과 profileModel을 합친 데이터)
-    final body = json.encode(signupData);
+    // 서버로 전송할 텍스트 데이터 추가
+    request.fields['user_id'] = signupData['user_id'];
+    request.fields['user_pw'] = signupData['user_pw'];
+    request.fields['user_email'] = signupData['user_email'];
+    request.fields['user_name'] = signupData['user_name'];
+    request.fields['user_phone'] = signupData['user_phone'];
+    request.fields['user_date_of_birth'] = signupData['user_date_of_birth'];
+    request.fields['user_gender'] = signupData['user_gender'];
+    request.fields['nickname'] = signupData['nickname'];
 
-    // POST 요청 보내기
+    // 프로필 이미지 파일을 서버에 추가
+    final profileImagePath = signupData['profile_picture'];
+    if (profileImagePath != null) {
+      final file = File(profileImagePath);
+      final fileBytes = await file.readAsBytes();
+
+      // 확장자를 확인하여 MediaType 설정
+      String fileExtension = profileImagePath.split('.').last.toLowerCase();
+      MediaType mediaType;
+
+      switch (fileExtension) {
+        case 'jpg':
+        case 'jpeg':
+          mediaType = MediaType('image', 'jpeg');
+          break;
+        case 'png':
+          mediaType = MediaType('image', 'png');
+          break;
+        default:
+          mediaType =
+              MediaType('application', 'octet-stream'); // 기본적으로 바이너리 파일 처리
+          break;
+      }
+
+      final multipartFile = http.MultipartFile.fromBytes(
+        'profilePicture', // 서버에서 받는 파일 필드명
+        fileBytes,
+        filename: profileImagePath.split('/').last, // 파일 이름
+        contentType: mediaType, // 적절한 미디어 타입
+      );
+      request.files.add(multipartFile);
+    }
+
     try {
-      final response = await http.post(url, headers: headers, body: body);
+      // 요청 보내기
+      final response = await request.send();
 
+      // 응답 처리
       if (response.statusCode == 200) {
-        // 성공적으로 응답을 받았다면
         print('회원가입 성공');
       } else {
-        // 실패한 경우
-        print('회원가입 실패: ${response.body}');
+        print('회원가입 실패: ${response.statusCode}');
       }
     } catch (e) {
-      // 예외 처리
       print('서버와의 연결에 실패했습니다: $e');
     }
   }
@@ -56,13 +95,15 @@ class ProfilePage extends ConsumerWidget {
       'user_email': authModel['email'],
       'user_name': authModel['name'],
       'user_phone': authModel['phoneNumber'],
-      'user_date_of_birth': profileModel.birthDate?.toIso8601String(),
+      'user_date_of_birth':
+          profileModel.birthDate?.toIso8601String(), // ISO 8601 문자열로 변환
       'user_gender': gender, // 변환된 성별 값
-      'profile_image_path': profileModel.profileImagePath,
+      'profile_picture': profileModel.profileImagePath, // 파일 경로
       'nickname': profileModel.nickname,
     };
 
     print('서버로 보내는 데이터: $signupData');
+
     // 서버로 데이터를 보내는 함수 호출
     await sendSignupData(signupData);
 

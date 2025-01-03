@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test/comunity/anonymous_board.dart';
+import 'package:flutter_application_test/comunity/beginner_fitness.dart';
+import 'package:flutter_application_test/comunity/diet_plan.dart';
+import 'package:flutter_application_test/comunity/fitness_challenge.dart';
+import 'package:flutter_application_test/comunity/free_comunity.dart';
+import 'package:flutter_application_test/comunity/running_board.dart';
+import 'package:flutter_application_test/comunity/workout_complete.dart';
 import 'package:flutter_application_test/home/challenge/deadline_mission.dart';
 import 'package:flutter_application_test/home/challenge/my_minssion.dart';
 
@@ -153,21 +160,74 @@ class _MainHomeState extends State<MainHome> {
           child: _buildItemContent(index), // 드래그 중에 보이는 아이템
         ),
         childWhenDragging: const SizedBox(), // 드래그 중일 때 빈 공간
-        child: DragTarget<String>(
-          onAcceptWithDetails: (details) {
-            setState(() {
-              // 드래그된 아이템의 위치를 받아서 새로운 위치로 이동
-              int oldIndex = boardList.indexOf(details.data);
-              String draggedItem = boardList.removeAt(oldIndex);
-              IconData draggedIcon = boardIcons.removeAt(oldIndex);
+        child: GestureDetector(
+          onTap: () {
+            // 아이템 클릭 시 해당 게시판으로 이동
+            String boardName = boardList[index];
+            switch (boardName) {
+              case '자유':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FreeCommunity()),
+                );
+                break;
+              case '익명':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AnonymousBoard()),
+                );
+                break;
+              case '오운완':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WorkoutComplete()),
+                );
+                break;
+              case '러닝':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RunningBoard()),
+                );
+                break;
+              case '헬린이':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BeginnerFitness()),
+                );
+                break;
+              case '식단':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DietPlan()),
+                );
+                break;
+              case '첼린지':
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FitnessChallenge()),
+                );
+                break;
+              // 다른 게시판들을 추가하려면 여기에 추가
+              default:
+                break;
+            }
+          },
+          child: DragTarget<String>(
+            onAcceptWithDetails: (details) {
+              setState(() {
+                // 드래그된 아이템의 위치를 받아서 새로운 위치로 이동
+                int oldIndex = boardList.indexOf(details.data);
+                String draggedItem = boardList.removeAt(oldIndex);
+                IconData draggedIcon = boardIcons.removeAt(oldIndex);
 
-              boardList.insert(index, draggedItem);
-              boardIcons.insert(index, draggedIcon);
-            });
-          },
-          builder: (context, candidateData, rejectedData) {
-            return _buildItemContent(index);
-          },
+                boardList.insert(index, draggedItem);
+                boardIcons.insert(index, draggedIcon);
+              });
+            },
+            builder: (context, candidateData, rejectedData) {
+              return _buildItemContent(index);
+            },
+          ),
         ),
       ),
     );
