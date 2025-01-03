@@ -25,7 +25,7 @@ class Login extends ConsumerWidget {
       final user = ref.read(authProvider);
       if (user != null) {
         // 로그인 성공 후 홈페이지로 이동
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => const Homepage()), // Homepage로 이동

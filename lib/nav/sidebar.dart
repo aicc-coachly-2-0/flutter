@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test/ai_service/subscription.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_test/auth/login.dart';
 import 'package:flutter_application_test/home/calendar/my_calendar.dart';
-import 'package:flutter_application_test/home/payment/payment_widget.dart';
 import 'package:flutter_application_test/home/question/frequencyquestion.dart';
 import 'package:flutter_application_test/home/question/question.dart';
 import 'package:flutter_application_test/home/userinfo/my_account.dart';
-import 'package:flutter_application_test/userpage/feed_check.dart';
 import 'package:flutter_application_test/state_controller/loginProvider.dart';
 
 class SideBar extends ConsumerWidget {
@@ -81,7 +80,7 @@ class SideBar extends ConsumerWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PaymentWidget(),
+                        builder: (context) => const Subscription(),
                       ),
                     );
                   },
@@ -138,7 +137,7 @@ class SideBar extends ConsumerWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const FeedCheck(),
+                          builder: (context) => Login(),
                         ),
                       );
                     },

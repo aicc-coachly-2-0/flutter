@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test/home/userinfo/cancel_user.dart';
 import 'package:flutter_application_test/home/userinfo/info_update.dart';
+import 'package:flutter_application_test/home/userinfo/my_block.dart';
 
 class MyAccount extends StatelessWidget {
   const MyAccount({super.key});
@@ -54,6 +55,26 @@ class MyAccount extends StatelessWidget {
               },
               child: const Text(
                 '내 정보 수정',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black, // 텍스트 색상
+                ),
+              ),
+            ),
+            // 차단 목록 관리 탭
+            TextButton(
+              onPressed: () {
+                print('내 차단목록 관리 클릭');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MyBlock(),
+                  ),
+                );
+                // 내 정보 수정 로직 추가
+              },
+              child: const Text(
+                '차단 관리 목록',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black, // 텍스트 색상

@@ -7,9 +7,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class User {
   final String userId;
   final String userEmail;
+  final String userName;
   final String token;
+  final dynamic userNumber;
+  final dynamic userPhone;
 
-  User({required this.userId, required this.userEmail, required this.token});
+  User(
+      {required this.userId,
+      required this.userEmail,
+      required this.userName,
+      required this.token,
+      required this.userNumber,
+      required this.userPhone});
 }
 
 // 로그인 상태를 관리하는 프로바이더
@@ -45,11 +54,14 @@ Future<void> loginUser(WidgetRef ref, String id, String password) async {
       ref.read(authProvider.notifier).state = User(
         userId: user['user_id'],
         userEmail: user['user_email'],
+        userName: user['user_name'],
         token: token,
+        userNumber: user['user_number'],
+        userPhone: user['user_phone'],
       );
 
       // 추가적으로 로그인 성공 후 처리할 동작
-      print('로그인 성공: ${user['user_email']}');
+      print('로그인 성공: $user');
     } else {
       throw Exception('로그인 실패');
     }

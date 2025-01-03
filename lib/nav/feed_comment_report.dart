@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ReportMissionButton extends StatelessWidget {
-  const ReportMissionButton({super.key});
+class FeedCommentReportButton extends StatelessWidget {
+  const FeedCommentReportButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ReportMissionButton extends StatelessWidget {
             // 피드 신고하기 버튼
             ElevatedButton(
               onPressed: () {
-                print('미션 신고하기');
+                print('댓글 신고하기');
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.red, // 글자 색을 빨간색으로 설정
@@ -35,7 +35,7 @@ class ReportMissionButton extends StatelessWidget {
                   ),
                 ),
               ),
-              child: Text('미션 신고하기'),
+              child: Text('댓글 신고하기'),
             ),
             // 구분선 (Divider)
             Divider(

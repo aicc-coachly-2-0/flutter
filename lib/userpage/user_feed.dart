@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test/userpage/feed_check.dart'; // FeedCheck import
 
 class UserFeed extends StatelessWidget {
-  // const 제거하고 일반적인 생성자로 수정
   UserFeed({super.key});
 
   // 이미지 URL 리스트 (예시)
   final List<String> imageUrls = [
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
+    'assets/image.png',
+    'assets/image.png',
+    'assets/image.png',
+    'assets/image.png',
+    'assets/image.png',
+    'assets/image.png',
   ];
 
   @override
@@ -28,11 +28,22 @@ class UserFeed extends StatelessWidget {
           ),
           itemCount: imageUrls.length, // 이미지 개수
           itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(imageUrls[index]),
-                  fit: BoxFit.cover, // 이미지를 박스에 맞게 꽉 채움
+            return InkWell(
+              onTap: () {
+                // 이미지 클릭 시 FeedCheck 페이지로 이동
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FeedCheck(), // FeedCheck로 이동
+                  ),
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(imageUrls[index]),
+                    fit: BoxFit.cover, // 이미지를 박스에 맞게 꽉 채움
+                  ),
                 ),
               ),
             );

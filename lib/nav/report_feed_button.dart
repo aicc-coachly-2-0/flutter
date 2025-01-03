@@ -40,8 +40,8 @@ class ReportButton extends StatelessWidget {
             // 구분선 (Divider)
             Divider(
                 color: Colors.black,
-                height: 1,
-                thickness: 1,
+                height: 0.2,
+                thickness: 0.2,
                 indent: 20,
                 endIndent: 20),
 
@@ -65,8 +65,8 @@ class ReportButton extends StatelessWidget {
             // 구분선 (Divider)
             Divider(
                 color: Colors.black,
-                height: 1,
-                thickness: 1,
+                height: 0.2,
+                thickness: 0.2,
                 indent: 20,
                 endIndent: 20),
 
