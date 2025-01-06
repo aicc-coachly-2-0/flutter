@@ -21,7 +21,7 @@ class _DetailFocusMissionState extends State<DetailFocusMission> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey, // Scaffold에 key 설정
-      endDrawer: const SideBar(), // 오른쪽 사이드바 설정
+      endDrawer: SideBar(), // 오른쪽 사이드바 설정
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 255, 255, 255), // 원하는 색으로 설정
         title: Text('주목받는 미션'), // 탭에 맞는 타이틀 표시

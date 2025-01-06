@@ -315,7 +315,7 @@ class _FreeCommunityState extends State<FreeCommunity> {
           ),
         ),
       ),
-      endDrawer: const SideBar(), // 사이드바 추가
+      endDrawer: SideBar(), // 사이드바 추가
     );
   }
 }

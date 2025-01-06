@@ -6,10 +6,14 @@ import 'package:flutter_application_test/state_controller/loginProvider.dart'; /
 
 class PaymentSuccess extends ConsumerWidget {
   final String receiptId;
+  final String subscriptionId;
+  final dynamic userNumber;
 
   const PaymentSuccess({
     super.key,
     required this.receiptId,
+    required this.subscriptionId,
+    required this.userNumber,
   });
 
   // 백엔드로 결제 정보 전송 함수
@@ -20,6 +24,8 @@ class PaymentSuccess extends ConsumerWidget {
     // 결제 정보를 담은 데이터 객체
     final paymentData = {
       'receiptId': receiptId,
+      'subscriptionId': subscriptionId,
+      'user_number': userNumber,
       // 필요한 다른 데이터가 있다면 여기에 추가 가능
     };
 
