@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test/state_controller/ai_food_questions_notifier.dart';
+import 'package:flutter_application_test/state_controller/ai_answer_cotroller.dart'; // 상태 관리 컨트롤러 임포트
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_test/home/home.dart'; // 홈 페이지 임포트
 
@@ -9,10 +9,10 @@ class AiAnswerPage extends ConsumerStatefulWidget {
   const AiAnswerPage({super.key, required this.aiAnswers});
 
   @override
-  _AiPtAnswerState createState() => _AiPtAnswerState();
+  _AiAnswerPageState createState() => _AiAnswerPageState();
 }
 
-class _AiPtAnswerState extends ConsumerState<AiAnswerPage> {
+class _AiAnswerPageState extends ConsumerState<AiAnswerPage> {
   int currentAnswerIndex = 0; // 현재 페이지의 인덱스를 추적
 
   @override
@@ -41,43 +41,97 @@ class _AiPtAnswerState extends ConsumerState<AiAnswerPage> {
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 40),
-            // '다음' 버튼
-            Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8, // 화면 너비의 80%
-                child: ElevatedButton(
-                  onPressed: () {
-                    // 마지막 답변이 아니면 인덱스를 증가시켜서 다음 답변으로 이동
-                    if (currentAnswerIndex < widget.aiAnswers.length - 1) {
-                      setState(() {
-                        currentAnswerIndex++; // 답변 인덱스를 증가시킴
-                      });
-                    } else {
-                      // 마지막 답변을 본 경우, 홈 화면으로 돌아가기
+            // 버튼들
+            Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween, // 버튼을 한 줄에 세 개 배치
+              children: [
+                // '이전' 버튼
+                if (currentAnswerIndex > 0) // 두 번째 이상 페이지에서 "이전" 버튼 표시
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          currentAnswerIndex--; // 이전 답변으로 이동
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 255, 111, 97),
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        '이전',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                // '저장하기' 버튼
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ref
+                          .read(aiExerciseAnswersProvider.notifier)
+                          .addAnswer(currentAnswer);
+                      print("저장된 답변: ${ref.read(aiExerciseAnswersProvider)}");
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const Homepage(),
                         ),
                       );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 255, 111, 97),
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 255, 111, 97),
+                      padding: const EdgeInsets.symmetric(vertical: 15.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      '저장하기',
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
-                  child: Text(
-                    // 마지막 답변일 때는 '확인', 그렇지 않으면 '다음'
-                    currentAnswerIndex < widget.aiAnswers.length - 1
-                        ? '다음'
-                        : '확인',
-                    style: const TextStyle(fontSize: 18),
+                ),
+                // '다음' 버튼
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // 마지막 답변이 아니면 인덱스를 증가시켜서 다음 답변으로 이동
+                      if (currentAnswerIndex < widget.aiAnswers.length - 1) {
+                        setState(() {
+                          currentAnswerIndex++; // 답변 인덱스를 증가시킴
+                        });
+                      } else {
+                        // 마지막 답변을 본 경우, 홈 화면으로 돌아가기
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Homepage(),
+                          ),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 255, 111, 97),
+                      padding: const EdgeInsets.symmetric(vertical: 15.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      currentAnswerIndex == widget.aiAnswers.length - 1
+                          ? '확인'
+                          : '다음',
+                      style: const TextStyle(fontSize: 18, color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),

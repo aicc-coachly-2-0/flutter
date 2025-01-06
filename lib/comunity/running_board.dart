@@ -306,7 +306,7 @@ class _RunningBoard extends State<RunningBoard> {
           ),
         ),
       ),
-      endDrawer: const SideBar(), // 사이드바 추가
+      endDrawer: SideBar(), // 사이드바 추가
     );
   }
 }

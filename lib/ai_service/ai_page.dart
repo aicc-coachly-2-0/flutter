@@ -17,20 +17,6 @@ class AIPage extends ConsumerWidget {
         elevation: 0,
         title: Text('AI 서비스', style: TextStyle(color: Colors.black)),
         centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const Homepage()),
-              );
-            },
-            child: const Text(
-              "다음에 이용하기",
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ],
       ),
       body: Container(
         color: Color(0xFFFFF3F3),

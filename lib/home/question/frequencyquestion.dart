@@ -1,74 +1,61 @@
 import 'package:flutter/material.dart';
+import 'faq_service.dart'; // FAQ 데이터를 가져오는 서비스 임포트
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Frequencyquestion extends StatelessWidget {
+class Frequencyquestion extends ConsumerWidget {
   const Frequencyquestion({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // FAQ 서비스 인스턴스화
+    final FaqService faqService = FaqService();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('자주 묻는 질문'),
       ),
-      body: ListView(
-        children: [
-          // 첫 번째 질문 섹션
-          ExpansionTile(
-            title: Text(
-              'Q1. 앱 사용 방법은 어떻게 되나요?',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            trailing: Icon(
-              Icons.arrow_drop_down, // 밑을 가리키는 화살표 아이콘
-              color: Colors.grey,
-            ),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  '앱 사용 방법은 간단합니다. 첫 화면에서 제공되는 기능을 이용하여 원하는 작업을 수행할 수 있습니다. 각 기능에 대한 자세한 설명은 앱 내 도움말에서 확인할 수 있습니다.',
-                ),
-              ),
-            ],
-          ),
-          // 두 번째 질문 섹션
-          ExpansionTile(
-            title: Text(
-              'Q2. 계정 정보를 수정하려면 어떻게 하나요?',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            trailing: Icon(
-              Icons.arrow_drop_down, // 밑을 가리키는 화살표 아이콘
-              color: Colors.grey,
-            ),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  '계정 정보는 설정 메뉴에서 수정할 수 있습니다. 이메일, 비밀번호, 프로필 정보 등 모든 항목을 변경할 수 있습니다.',
-                ),
-              ),
-            ],
-          ),
-          // 세 번째 질문 섹션
-          ExpansionTile(
-            title: Text(
-              'Q3. 비밀번호를 잊어버렸습니다. 어떻게 해야 하나요?',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            trailing: Icon(
-              Icons.arrow_drop_down, // 밑을 가리키는 화살표 아이콘
-              color: Colors.grey,
-            ),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  '비밀번호를 잊어버렸다면, 로그인 화면에서 "비밀번호 찾기" 버튼을 클릭하여 이메일을 통해 비밀번호를 재설정할 수 있습니다.',
-                ),
-              ),
-            ],
-          ),
-        ],
+      body: FutureBuilder<List<Faq>>(
+        // FAQ 데이터를 비동기적으로 가져옴
+        future:
+            faqService.fetchFaqs(ref), // ref를 통해 authProvider에 접근하여 유저 정보 전달
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // 로딩 중일 때 로딩 인디케이터 표시
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            // 오류 발생 시 오류 메시지 표시
+            return Center(child: Text('오류 발생: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            // 데이터가 없을 경우 빈 화면 표시
+            return Center(child: Text('FAQ 항목이 없습니다.'));
+          } else {
+            // FAQ 데이터가 있을 경우 리스트로 표시
+            List<Faq> faqs = snapshot.data!;
+
+            return ListView.builder(
+              itemCount: faqs.length,
+              itemBuilder: (context, index) {
+                Faq faq = faqs[index];
+                return ExpansionTile(
+                  title: Text(
+                    'Q${index + 1}. ${faq.content}',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_drop_down, // 밑을 가리키는 화살표 아이콘
+                    color: Colors.grey,
+                  ),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(faq.answer),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }

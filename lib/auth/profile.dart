@@ -18,7 +18,9 @@ class ProfilePage extends ConsumerWidget {
 
   // 서버로 POST 요청을 보내는 함수
   Future<void> sendSignupData(Map<String, dynamic> signupData) async {
-    final url = Uri.parse('${dotenv.env['API_BASE_URL']}/auth/signup');
+    final url = Uri.parse('${dotenv.env['API_BASE_URL']}/auth/user-signup');
+    // final url = Uri.parse('http://127.0.0.1:8080/auth/user-signup');
+    // final url = Uri.parse('http://10.0.2.2:8080/auth/user-signup');
 
     // 요청 헤더 설정 (multipart/form-data는 자동으로 boundary를 설정)
     final request = http.MultipartRequest('POST', url);
@@ -68,7 +70,7 @@ class ProfilePage extends ConsumerWidget {
 
     try {
       // 요청 보내기
-      final response = await request.send();
+      final response = await request.send().timeout(Duration(seconds: 30));
 
       // 응답 처리
       if (response.statusCode == 200) {

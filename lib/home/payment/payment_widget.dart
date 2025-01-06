@@ -63,6 +63,8 @@ class PaymentWidget extends ConsumerWidget {
 
         final parsedData = jsonDecode(data);
         final receiptId = parsedData['data']['receipt_id'];
+        final subscriptionId = parsedData['data']['subscription_id'];
+        final userNumber = user.userNumber;
 
 // PaymentSuccess 페이지로 전달
         Navigator.pushReplacement(
@@ -70,6 +72,8 @@ class PaymentWidget extends ConsumerWidget {
           MaterialPageRoute(
             builder: (context) => PaymentSuccess(
               receiptId: receiptId,
+              subscriptionId: subscriptionId,
+              userNumber: userNumber,
             ),
           ),
         );

@@ -23,7 +23,7 @@ class Homepage extends ConsumerWidget {
     }
 
     return Scaffold(
-      drawer: const SideBar(),
+      drawer: SideBar(),
       body: const Bottom(), // Bottom 네비게이션 바 컴포넌트
     );
   }

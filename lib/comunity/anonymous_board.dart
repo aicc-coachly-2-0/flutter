@@ -306,7 +306,7 @@ class _AnonymousBoard extends State<AnonymousBoard> {
           ),
         ),
       ),
-      endDrawer: const SideBar(), // 사이드바 추가
+      endDrawer: SideBar(), // 사이드바 추가
     );
   }
 }

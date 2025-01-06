@@ -9,7 +9,8 @@ class AiServiceChoice extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
+      body: SingleChildScrollView(
+        // 전체 화면을 스크롤 가능하게 감싸기
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
