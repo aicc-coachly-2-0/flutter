@@ -8,8 +8,13 @@ class User {
   final String userId;
   final String userEmail;
   final String token;
+  final int userNumber;
 
-  User({required this.userId, required this.userEmail, required this.token});
+  User(
+      {required this.userId,
+      required this.userEmail,
+      required this.token,
+      required this.userNumber});
 }
 
 // 로그인 상태를 관리하는 프로바이더
@@ -43,13 +48,13 @@ Future<void> loginUser(WidgetRef ref, String id, String password) async {
 
       // 로그인 성공 후 프로바이더에 로그인 정보 저장
       ref.read(authProvider.notifier).state = User(
-        userId: user['user_id'],
-        userEmail: user['user_email'],
-        token: token,
-      );
+          userId: user['user_id'],
+          userEmail: user['user_email'],
+          token: token,
+          userNumber: user['user_number']);
 
       // 추가적으로 로그인 성공 후 처리할 동작
-      print('로그인 성공: ${user['user_email']}');
+      print('로그인 성공: ${user['user_email']}, ${user['user_number']}');
     } else {
       throw Exception('로그인 실패');
     }
