@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test/ai_service/ai_page.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_application_test/home/payment/subscriptionList.dart';
+import 'package:flutter_application_test/state_controller/loginProvider.dart';
 
-class Subscription extends StatelessWidget {
+class Subscription extends ConsumerWidget {
   const Subscription({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // 샘플 데이터
-    final List<Map<String, dynamic>> activeSubscriptions = [
-      {
-        'title': 'AI 서비스 구독',
-        'details': '₩9,900 / month\n결제일: 2024-12-21',
-      },
-    ];
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 로그인된 사용자 정보 가져오기
+    final user = ref.watch(authProvider);
 
-    final List<Map<String, dynamic>> subscriptionHistory = [
-      {
-        'title': 'AI 서비스 과거 구독',
-        'details': '₩9,900 / month\n종료일: 2024-11-21',
-      },
-    ];
+    // 로그인된 사용자가 없으면 경고 메시지 표시
+    if (user == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('구독 정보 관리'),
+          centerTitle: true,
+        ),
+        body: const Center(
+          child: Text('로그인한 사용자가 없습니다.'),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -38,16 +41,15 @@ class Subscription extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             ListTile(
-              leading: const Icon(Icons.payment), // 아이콘 추가
-              title: const Text('내 결제 정보'), // 텍스트
+              leading: const Icon(Icons.payment),
+              title: const Text('내 결제 정보'),
               onTap: () {
-                // SubscriptionList로 이동
-                Navigator.push(
+                // userNumber를 넘기기
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => SubscriptionList(
-                      activeSubscriptions: activeSubscriptions,
-                      subscriptionHistory: subscriptionHistory,
+                      userNumber: user.userNumber, // userNumber를 넘김
                     ),
                   ),
                 );
@@ -65,10 +67,11 @@ class Subscription extends StatelessWidget {
               ),
               trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
+                // AI 서비스 페이지로 이동
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AiPage(), // AI 서비스 구독 페이지로 이동
+                    builder: (context) => const AIPage(),
                   ),
                 );
               },
@@ -78,108 +81,4 @@ class Subscription extends StatelessWidget {
       ),
     );
   }
-}
-
-class SubscriptionList extends StatelessWidget {
-  final List<Map<String, dynamic>> activeSubscriptions;
-  final List<Map<String, dynamic>> subscriptionHistory;
-
-  const SubscriptionList({
-    Key? key,
-    required this.activeSubscriptions,
-    required this.subscriptionHistory,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('구독 목록'),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            
-            _buildSectionTitle('구독중'),
-            const SizedBox(height: 8),
-            _buildSubscriptionSection(activeSubscriptions, true),
-            
-            _buildSectionTitle('히스토리'),
-            const SizedBox(height: 8),
-            _buildSubscriptionSection(subscriptionHistory, false),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-
-  Widget _buildSubscriptionSection(
-      List<Map<String, dynamic>> subscriptions, bool canCancel) {
-    if (subscriptions.isEmpty) {
-      return const Center(
-        child: Text(
-          '목록이 비어 있습니다.',
-          style: TextStyle(fontSize: 16, color: Colors.black54),
-        ),
-      );
-    }
-
-    return ListView.separated(
-      shrinkWrap: true, // 리스트 크기를 필요한 만큼만 사용
-      physics: const NeverScrollableScrollPhysics(), // 리스트 자체 스크롤 비활성화
-        itemCount: subscriptions.length,
-        itemBuilder: (context, index) {
-          final subscription = subscriptions[index];
-          return ListTile(
-            title: Text(
-              subscription['title'] ?? '알 수 없는 서비스',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-            subtitle: Text(
-              subscription['details'] ?? '정보 없음',
-              style: const TextStyle(fontSize: 14),
-            ),
-            trailing: canCancel
-                ? TextButton(
-                    onPressed: () {
-                      // 구독 취소 로직
-                      print('${subscription['title']} 구독 취소 클릭');
-                    },
-                    child: const Text(
-                      '구독 취소',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  )
-                : null,
-          );
-        },
-        separatorBuilder: (context, index) => const Divider(),
-      );
-  }
-}
-
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: const Subscription(),
-  ));
 }

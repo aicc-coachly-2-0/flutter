@@ -1,59 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test/home/home.dart';
-import 'package:flutter_application_test/home/payment/payment_widget.dart';
-import 'package:flutter_application_test/home/payment/subscription.dart';
-import 'package:flutter_application_test/nav/sidebar.dart'; // 사이드바 추가
+import 'package:flutter_application_test/home/payment/payment_agree.dart';
+import 'package:flutter_application_test/state_controller/loginProvider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // 사이드바 추가
 
-void main() {
-  runApp(AiPage());
-}
+class AIPage extends ConsumerWidget {
+  const AIPage({super.key});
 
-class AiPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      
-      debugShowCheckedModeBanner: false,
-      home: AIPage(),
-      
-    );
-  }
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authProvider);
 
-class AIPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () {
-            Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Subscription()),
-                );
-              }
-        ),
-        title: Text('AI 서비스', style: TextStyle(color: Colors.black)),
-        centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: () {
-               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Homepage()),
-                );
-              },
-            child: const Text(
-              "다음에 이용하기",
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ],
-      ),
-      drawer: const SideBar(), // 사이드바 추가
       body: Container(
         color: Color(0xFFFFF3F3),
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -66,7 +24,7 @@ class AIPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: Colors.pink,
+                color: const Color.fromARGB(255, 228, 69, 55),
               ),
             ),
             SizedBox(height: 10),
@@ -81,7 +39,7 @@ class AIPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: const Color.fromARGB(255, 228, 69, 55),
               ),
             ),
             SizedBox(height: 20),
@@ -90,18 +48,22 @@ class AIPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PaymentWidget(),
+                    builder: (context) => PaymentAgree(),
                   ),
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink,
+                backgroundColor: const Color.fromARGB(255, 228, 69, 55),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
               ),
-              child: Text('AI 서비스 구독', style: TextStyle(fontSize: 18, color: Colors.white)),
+              child: Text('AI 서비스 구독',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white)),
             ),
             SizedBox(height: 10),
             Text(
@@ -111,8 +73,10 @@ class AIPage extends StatelessWidget {
             SizedBox(height: 30),
             Expanded(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Distribute cards evenly
-                crossAxisAlignment: CrossAxisAlignment.center, // Align cards to the center
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceEvenly, // Distribute cards evenly
+                crossAxisAlignment:
+                    CrossAxisAlignment.center, // Align cards to the center
                 children: [
                   Expanded(
                     child: FeatureCard(
@@ -144,15 +108,20 @@ class FeatureCard extends StatelessWidget {
   final String title;
   final String description;
 
-  FeatureCard({required this.icon, required this.title, required this.description});
+  FeatureCard(
+      {super.key,
+      required this.icon,
+      required this.title,
+      required this.description});
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         CircleAvatar(
           radius: 40,
-          backgroundColor: Colors.pink[100],
-          child: Icon(icon, size: 40, color: Colors.pink),
+          backgroundColor: const Color.fromARGB(255, 253, 227, 218),
+          child: Icon(icon,
+              size: 40, color: const Color.fromARGB(255, 241, 67, 54)),
         ),
         SizedBox(height: 10),
         Text(
