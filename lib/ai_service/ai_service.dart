@@ -1,12 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test/ai_questions_food/agree.dart';
 import 'package:flutter_application_test/ai_questions_pt/agree.dart';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_application_test/ai_service/ai_page.dart';
+import 'package:flutter_application_test/state_controller/loginProvider.dart';
 
-class AiServiceChoice extends StatelessWidget {
+class AiServiceChoice extends ConsumerStatefulWidget {
   const AiServiceChoice({super.key});
 
   @override
+  _AiServiceChoiceState createState() => _AiServiceChoiceState();
+}
+
+class _AiServiceChoiceState extends ConsumerState<AiServiceChoice> {
+  bool isLoading = true; // 데이터 로딩 상태
+  bool hasBillingKey = false; // 빌링키 여부
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSubscriptionData(); // 구독 정보 조회
+  }
+
+  Future<void> fetchSubscriptionData() async {
+    final user = ref.read(authProvider); // 로그인된 사용자 정보 가져오기
+
+    if (user == null) {
+      print('로그인 정보가 없습니다.');
+      return;
+    }
+
+    final String url =
+        'http://localhost:8000/api/subscription/${user.userNumber}';
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        print('Received subscriptions data: $data');
+
+        if (data['billing_key'] != null && data['billing_key'].isNotEmpty) {
+          setState(() {
+            hasBillingKey = true;
+          });
+        } else {
+          setState(() {
+            hasBillingKey = false;
+          });
+        }
+      } else {
+        throw Exception('구독 정보 조회 실패');
+      }
+    } catch (error) {
+      print('구독 정보 조회 중 오류 발생: $error');
+    } finally {
+      setState(() {
+        isLoading = false; // 데이터 로딩 완료
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // 로딩 상태
+    if (isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text("AI 서비스 선택"),
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    // 빌링키 여부에 따라 다른 화면 표시
+    if (!hasBillingKey) {
+      return const AIPage(); // 빌링키가 없으면 AIPage로 이동
+    }
     return Scaffold(
       // backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Padding(
