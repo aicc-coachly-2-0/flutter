@@ -40,6 +40,11 @@
 	<string>마이크 사용에 필요합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>앱에서 갤러리 접근을 요청합니다.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+    	<key>NSAllowsArbitraryLoads</key>
+    	<true/>
+	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

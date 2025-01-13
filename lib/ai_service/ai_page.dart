@@ -12,12 +12,7 @@ class AIPage extends ConsumerWidget {
     final user = ref.watch(authProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text('AI 서비스', style: TextStyle(color: Colors.black)),
-        centerTitle: true,
-      ),
+      backgroundColor: Colors.white,
       body: Container(
         color: Color(0xFFFFF3F3),
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -30,7 +25,7 @@ class AIPage extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: Colors.pink,
+                color: const Color.fromARGB(255, 228, 69, 55),
               ),
             ),
             SizedBox(height: 10),
@@ -41,11 +36,11 @@ class AIPage extends ConsumerWidget {
             ),
             SizedBox(height: 20),
             Text(
-              '₩9,900 / month',
+              '₩1,000 / month',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: const Color.fromARGB(255, 228, 69, 55),
               ),
             ),
             SizedBox(height: 20),
@@ -59,14 +54,17 @@ class AIPage extends ConsumerWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink,
+                backgroundColor: const Color.fromARGB(255, 228, 69, 55),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
               ),
               child: Text('AI 서비스 구독',
-                  style: TextStyle(fontSize: 18, color: Colors.white)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white)),
             ),
             SizedBox(height: 10),
             Text(
@@ -122,8 +120,9 @@ class FeatureCard extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 40,
-          backgroundColor: Colors.pink[100],
-          child: Icon(icon, size: 40, color: Colors.pink),
+          backgroundColor: const Color.fromARGB(255, 253, 227, 218),
+          child: Icon(icon,
+              size: 40, color: const Color.fromARGB(255, 241, 67, 54)),
         ),
         SizedBox(height: 10),
         Text(

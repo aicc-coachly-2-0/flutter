@@ -63,6 +63,7 @@ class _PaymentAgreementState extends State<PaymentAgreement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("이용약관 동의"),
         backgroundColor: const Color.fromARGB(255, 255, 111, 97),

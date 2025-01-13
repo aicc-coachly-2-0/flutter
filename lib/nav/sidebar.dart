@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test/ai_service/subscription.dart';
 import 'package:flutter_application_test/ftp_service/ftp_service.dart';
+import 'package:flutter_application_test/home/payment/subscription.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_application_test/auth/login.dart';
 import 'package:flutter_application_test/home/calendar/my_calendar.dart';
@@ -15,7 +16,8 @@ class SideBar extends ConsumerWidget {
 
   // 유저의 프로필 이미지를 가져오는 URL 생성
   String getProfileImageUrl(String userId) {
-    const ftpBaseUrl = "http://222.112.27.120"; // FTP 서버 URL (HTTP로 접근 가능한 경우)
+    final ftpBaseUrl = dotenv.env['FTP_URL'] ?? 'default_value';
+
     final imageUrl = '$ftpBaseUrl/coachly/profile/user_$userId.jpg';
     return imageUrl;
   }

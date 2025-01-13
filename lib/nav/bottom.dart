@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test/ai_service/ai_service.dart';
-import 'package:flutter_application_test/comunity/main_comunity.dart';
+import 'package:flutter_application_test/community/main_community.dart';
 import 'package:flutter_application_test/home/challenge/challenge_main.dart';
 import 'package:flutter_application_test/home/main_home.dart';
 import 'package:flutter_application_test/home/notification/notification.dart';
 import 'package:flutter_application_test/home/video.dart';
 // import 'package:flutter_application_test/home/video.dart';
 import 'package:flutter_application_test/nav/sidebar.dart';
-import 'package:flutter_application_test/userpage/user_my_page.dart'; // 사이드바 임포트
+import 'package:flutter_application_test/userpage/Mypage/user_my_page.dart'; // 사이드바 임포트
 
 class Bottom extends StatefulWidget {
   const Bottom({super.key});
@@ -22,7 +22,7 @@ class _BottomState extends State<Bottom> {
     'HOME', // Home 화면의 타이틀
     'Challenge', // AI 서비스 화면의 타이틀
     'AI Services', // AI 서비스 화면의 타이틀
-    'Comunity', // Video 화면의 타이틀
+    'Community', // Video 화면의 타이틀
     'My Page', // My Page 화면의 타이틀
   ];
 
@@ -106,7 +106,7 @@ class _BottomState extends State<Bottom> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.people_alt, size: 18),
-              label: 'Comunity',
+              label: 'Community',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_pin_sharp, size: 18),
