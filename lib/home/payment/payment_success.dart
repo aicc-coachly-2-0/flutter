@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application_test/state_controller/loginProvider.dart'; // authProvider 가져오기
@@ -18,13 +19,13 @@ class PaymentSuccess extends ConsumerWidget {
 
   // 백엔드로 결제 정보 전송 함수
   Future<void> sendPaymentInfoToBackend(BuildContext context) async {
-    const endpoint = 'http://localhost:8080/lookup-billingkey'; // 실제 서버 URL로 수정
-    final uri = Uri.parse(endpoint);
+    final url = Uri.parse(
+        '${dotenv.env['API_BASE_URL']}/subscription/lookup-billingkey');
 
     // 결제 정보를 담은 데이터 객체
     final paymentData = {
-      'receiptId': receiptId,
-      'subscriptionId': subscriptionId,
+      'receipt_id': receiptId,
+      'subscription_id': subscriptionId,
       'user_number': userNumber,
       // 필요한 다른 데이터가 있다면 여기에 추가 가능
     };
@@ -32,7 +33,7 @@ class PaymentSuccess extends ConsumerWidget {
     try {
       // HTTP POST 요청
       final response = await http.post(
-        uri,
+        url,
         headers: {'Content-Type': 'application/json'},
         body: json.encode(paymentData), // JSON 데이터 전송
       );
@@ -86,7 +87,25 @@ class PaymentSuccess extends ConsumerWidget {
             ),
             const SizedBox(height: 20),
             Text('영수증 ID: $receiptId', style: const TextStyle(fontSize: 16)),
-            // 추가적으로 결제 관련 정보를 UI로 보여줄 수 있습니다.
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                // 완료 버튼을 누르면 홈 화면으로 이동
+                Navigator.pushReplacementNamed(context, '/home');
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50),
+                backgroundColor: const Color.fromARGB(255, 255, 111, 97),
+              ),
+              child: const Text(
+                '확인',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ],
         ),
       ),

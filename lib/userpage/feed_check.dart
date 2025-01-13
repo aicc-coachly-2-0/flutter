@@ -1,15 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test/nav/feed_comment.dart';
+import 'package:flutter_application_test/get_method/user_feed_get.dart'; // Feed 모델 포함
+import 'package:flutter_application_test/nav/Comment/feed_comment.dart';
 import 'package:flutter_application_test/nav/report_feed_button.dart';
+import 'package:flutter_application_test/state_controller/loginProvider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Riverpod을 사용해 로그인된 사용자 정보 가져오기
 
-class FeedCheck extends StatelessWidget {
-  const FeedCheck({super.key});
+class FeedCheck extends ConsumerWidget {
+  final Feed feed;
+
+  const FeedCheck({super.key, required this.feed});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 로그인된 사용자 정보 가져오기
+    final user = ref.read(authProvider); // 로그인된 사용자 정보
+    if (user == null) {
+      return Center(child: Text('사용자 정보가 없습니다.'));
+    }
+
+    // 사용자 정보
+    final userName = user.userName; // 로그인된 사용자의 이름
+
+    // Date formatting (피드 작성일)
+    String formattedDate =
+        "${feed.createdAt.year}년 ${feed.createdAt.month}월 ${feed.createdAt.day}일";
+
+    // 유저의 프로필 이미지를 가져오는 URL 생성
+    String getProfileImageUrl(String userId) {
+      final ftpBaseUrl =
+          dotenv.env['FTP_URL'] ?? 'http://default.url'; // FTP 서버 URL (기본값 제공)
+      final imageUrl = '$ftpBaseUrl/coachly/profile/user_$userId.jpg';
+      return imageUrl;
+    }
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('OOO의 피드'), // 타이틀은 OOO의 피드
+        backgroundColor: Colors.white,
+        title: Text('$userName의 피드'), // 로그인된 사용자의 이름을 타이틀에 표시
         actions: [
           IconButton(
             icon: Icon(Icons.more_horiz), // 점점점 버튼
@@ -28,19 +57,19 @@ class FeedCheck extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        // 여기서 전체를 스크롤 가능하게 만듭니다.
+        // 전체 스크롤 가능하게 처리
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 사용자 정보
+            // 사용자 정보 표시
             Row(
               children: [
                 // 프로필 사진
                 CircleAvatar(
                   radius: 25,
-                  backgroundImage:
-                      AssetImage('assets/image.png'), // 프로필 사진 (예시 URL)
+                  backgroundImage: NetworkImage(
+                      getProfileImageUrl(user.userId)), // 프로필 사진 (예시 URL)
                 ),
                 SizedBox(width: 10),
                 // 사용자 이름과 날짜
@@ -48,12 +77,12 @@ class FeedCheck extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '사용자 이름', // 사용자 이름
+                      userName, // 로그인된 사용자의 이름을 표시
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     Text(
-                      '2024년 12월 20일', // 게시물 작성 날짜
+                      formattedDate, // 게시물 작성 날짜
                       style: TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                   ],
@@ -78,11 +107,11 @@ class FeedCheck extends StatelessWidget {
             ),
             SizedBox(height: 20),
 
-            // 사진 (가로폭을 전부 차지하는 정사각형)
+            // 피드 이미지 (가로폭을 전부 차지하는 정사각형)
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                'assets/image.png', // 이미지 (예시 URL)
+              child: Image.network(
+                '${dotenv.env['FTP_URL']}${feed.imgNumber}', // 서버에서 받아온 이미지 URL
                 width: double.infinity,
                 height: 300,
                 fit: BoxFit.cover,
@@ -109,7 +138,8 @@ class FeedCheck extends StatelessWidget {
                       isScrollControlled: true, // 하단 시트 크기 조정
                       backgroundColor: Colors.transparent, // 배경을 투명하게 설정
                       builder: (BuildContext context) {
-                        return FeedComment(); // FeedComment 위젯을 호출하여 하단에 표시
+                        return FeedComment(
+                            feed: feed); // FeedComment 위젯을 호출하여 하단에 표시
                       },
                     );
                   },
@@ -118,12 +148,7 @@ class FeedCheck extends StatelessWidget {
             ),
             // 제목과 내용
             Text(
-              '피드 제목',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-            SizedBox(height: 10),
-            Text(
-              '여기에 피드 내용이 들어갑니다. 이 부분에 사용자가 작성한 내용을 출력합니다.',
+              feed.content, // 피드의 내용 표시
               style: TextStyle(fontSize: 14, color: Colors.black87),
             ),
           ],

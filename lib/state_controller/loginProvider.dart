@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // 로그인 정보 모델
+// 로그인 정보 모델
 class User {
   final String userId;
   final String userEmail;
@@ -12,13 +13,14 @@ class User {
   final dynamic userNumber;
   final dynamic userPhone;
 
-  User(
-      {required this.userId,
-      required this.userEmail,
-      required this.userName,
-      required this.token,
-      required this.userNumber,
-      required this.userPhone});
+  User({
+    required this.userId,
+    required this.userEmail,
+    required this.userName,
+    required this.token,
+    required this.userNumber,
+    required this.userPhone,
+  });
 }
 
 // 로그인 상태를 관리하는 프로바이더

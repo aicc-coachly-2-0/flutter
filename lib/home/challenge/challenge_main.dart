@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test/home/challenge/challenge_upload.dart';
-import 'package:flutter_application_test/home/challenge/deadline_mission.dart';
-import 'package:flutter_application_test/home/challenge/focus_mission.dart';
+import 'package:flutter_application_test/home/challenge/Upload/challenge_upload.dart';
+import 'package:flutter_application_test/home/challenge/DeadLine/deadline_mission.dart';
+import 'package:flutter_application_test/home/challenge/Focus/focus_mission.dart';
 import 'package:flutter_application_test/home/hall_of_fame/hall_of_fame.dart';
-import 'package:flutter_application_test/home/challenge/my_minssion.dart';
+import 'package:flutter_application_test/home/challenge/Mymission/my_minssion.dart';
 
 class ChallengeMain extends StatelessWidget {
   const ChallengeMain({super.key});
@@ -18,7 +18,7 @@ class ChallengeMain extends StatelessWidget {
           children: [
             // 미션 섹션을 임포트하여 사용
             MyMission(),
-            FocusMinssion(),
+            FocusMission(),
             HallofFame(),
             DeadlineMission(),
             // 예시로 다른 섹션들 추가할 수 있음

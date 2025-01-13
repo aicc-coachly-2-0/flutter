@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'faq_service.dart'; // FAQ 데이터를 가져오는 서비스 임포트
+import '../../get_method/faq_get.dart'; // FAQ 데이터를 가져오는 서비스 임포트
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Frequencyquestion extends ConsumerWidget {

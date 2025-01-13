@@ -7,7 +7,9 @@ class SignupCompleted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false, // 기본 뒤로가기 버튼을 없앰
         title: const Text('회원가입 완료'),
         backgroundColor: const Color.fromARGB(255, 255, 111, 97),
         centerTitle: true,

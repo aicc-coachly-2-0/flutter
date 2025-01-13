@@ -66,19 +66,9 @@ class Login extends ConsumerWidget {
     final heightRatio = MediaQuery.of(context).size.height / 812;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true, // 키보드가 올라올 때 화면이 밀리도록 설정
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.home,
-            color: Colors.black, // 텍스트와 색상을 통일
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Homepage()),
-            ); // 뒤로가기
-          },
-        ),
+        automaticallyImplyLeading: false, // 기본 뒤로가기 버튼을 없앰
         title: Text(
           "로그인",
           style: TextStyle(
@@ -92,7 +82,8 @@ class Login extends ConsumerWidget {
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 255, 111, 97),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
+        // 화면을 스크롤할 수 있도록 감싸줌
         padding: EdgeInsets.symmetric(horizontal: widthRatio * 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

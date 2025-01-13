@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test/home/question/complete_questions.dart';
-import 'package:flutter_application_test/home/question/detail_question.dart';
-import 'package:flutter_application_test/home/question/question_list.dart';
+import 'package:flutter_application_test/home/question/Q&A/complete_questions.dart';
+import 'package:flutter_application_test/home/question/Q&A/apply_question.dart';
+import 'package:flutter_application_test/home/question/Q&A/question_list.dart';
 
 class Question extends StatefulWidget {
   const Question({super.key});
@@ -68,7 +68,7 @@ class _Question extends State<Question> with SingleTickerProviderStateMixin {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const DetailQuestion(),
+              builder: (context) => const ApplyQuestion(),
             ),
           );
         },
